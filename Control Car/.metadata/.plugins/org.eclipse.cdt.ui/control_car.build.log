@@ -1,0 +1,50 @@
+00:48:43 **** Incremental Build of configuration Debug for project control_car ****
+make all 
+Building file: ../APP/control_car.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"APP/control_car.d" -MT"APP/control_car.o" -c -o "APP/control_car.o" "../APP/control_car.c"
+In file included from ../APP/control_car.c:20:
+c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+In file included from c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:37,
+                 from ../APP/control_car.c:20:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../APP/control_car.c: In function 'start_moving':
+../APP/control_car.c:63: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:69: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:75: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:81: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:87: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:93: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:99: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:105: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:111: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+../APP/control_car.c:117: warning: passing argument 1 of 'LCD_displayCharacter' makes integer from pointer without a cast
+Finished building: ../APP/control_car.c
+ 
+Building target: control_car.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,control_car.map -mmcu=atmega32 -o "control_car.elf"  ./MCAL/GIE.o ./MCAL/gpio.o ./MCAL/interrupt.o ./MCAL/spi.o ./MCAL/timers.o ./MCAL/twi.o ./MCAL/uart.o  ./HAL/SevenSegment.o ./HAL/external_eeprom.o ./HAL/keypad.o ./HAL/lcd.o ./HAL/motor.o ./HAL/ultra_sonic.o  ./APP/control_car.o   
+Finished building target: control_car.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S control_car.elf  >"control_car.lss"
+Finished building: control_car.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 control_car.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   21078 bytes (64.3% Full)
+(.text + .data + .bootloader)
+
+Data:        369 bytes (18.0% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+00:48:44 Build Finished. 0 errors, 12 warnings. (took 921ms)
+

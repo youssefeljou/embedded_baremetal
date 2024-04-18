@@ -1,0 +1,290 @@
+/*
+ * control_car.c
+ *
+ *  Created on: Sep 9, 2023
+ *      Author: Youmna
+ */
+
+#include "../LIB/std_types.h"
+#include "../LIB/common_macros.h"
+#include "../MCAL/gpio.h"
+#include "../MCAL/GIE.h"
+#include "../MCAL/twi.h"
+#include "../MCAL/timers.h"
+#include "../HAL/external_eeprom.h"
+#include "../HAL/lcd.h"
+#include "../HAL/keypad.h"
+#include "../HAL/ultra_sonic.h"
+#include "../MCAL/interrupt.h"
+#include "../MCAL/uart.h"
+#include <avr/delay.h>
+#include "../MCAL/spi.h"
+#include <avr/io.h>
+#define forward		0
+#define backword	1
+#define F_CPU 8000000UL
+uint8 sys_password;
+Timer0_ConfigType config0={0,250,TIMER0_COMPARE_MODE,timer0_PRESCALAR_CLK8};
+Timer2_ConfigType config2={0,250,TIMER2_COMPARE_MODE,timer2_PRESCALAR_CLK1024};
+uint8 flag_to_send=1;
+uint8 flag_to_recieve;
+uint8 speed;
+uint8 direction;
+/*ISR(TIMER2_COMP_vect)
+{
+	if (flag_to_send==0)
+	{
+		UART_sendByte(flag_to_send);
+		flag_to_recieve=UART_recieveByte();
+		stop_moving();
+	}
+
+
+
+}
+ */
+void choose_direction()
+{
+	if (direction==forward)
+	{
+		LCD_displayStringRowColumn(1, 0, "forward");
+	}
+	else if (direction==backword)
+	{
+		LCD_displayStringRowColumn(1, 0, "backword");
+	}
+}
+void start_moving(uint8 speed)
+{
+	uint8 temp;
+	LCD_displayStringRowColumn(0, 0, "on  ");
+	if (speed==1)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==2)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==3)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==4)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==5)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==6)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==7)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==8)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if (speed==9)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+	else if(10)
+	{
+		temp=speed*20;
+		LCD_intgerToString(temp);
+		LCD_displayCharacter(" ");
+	}
+
+}
+void stop_moving()
+{
+	LCD_displayStringRowColumn(0, 0, "off    ");
+}
+void start()
+{
+	LCD_clearScreen();
+	LCD_displayString("enter pass");
+	LCD_moveCursor(1, 0);
+}
+
+
+uint8 check_password(uint16 entered)
+{
+
+
+	if (entered == 1111)
+	{
+		if (sys_password==5)
+		{
+			return 1;
+		}
+
+		return 0;
+	}
+	return 0;
+}
+
+void print_ultrasonic()
+{
+	if (Ultrasonic_readDistance()>100)
+	{
+
+		LCD_moveCursor(2,0);
+		LCD_intgerToString(Ultrasonic_readDistance());
+		TIMER0_init(&config0);
+		delay0(80);
+		flag_to_send=1;
+		/*	LCD_displayCharacter(' ');
+		LCD_displayCharacter(' ');
+		TIMER0_init(&config0);
+		delay0(80);
+		 */
+
+	}
+	else if (Ultrasonic_readDistance()<=30)
+	{
+		LCD_moveCursor(2,0);
+		LCD_intgerToString(Ultrasonic_readDistance());
+		TIMER0_init(&config0);
+		delay0(80);
+		LCD_displayCharacter(' ');
+		flag_to_send=0;
+	}
+	else
+	{
+		LCD_moveCursor(2,0);
+		LCD_intgerToString(Ultrasonic_readDistance());
+		TIMER0_init(&config0);
+		delay0(80);
+		LCD_displayCharacter(' ');
+		/*TIMER0_init(&config0);
+		delay0(80);
+		 */
+		flag_to_send=1;
+	}
+}
+
+void welcome()
+{
+	LCD_displayStringRowColumn(0, 0,"welcome");
+	LCD_moveCursor(1, 0);
+	LCD_displayStringRowColumn(1, 0, "youssef");
+	TIMER0_init(&config0);
+	delay0(15000);
+}
+int main()
+{
+
+	uint8 i,key_switch=0,buzzer,test;
+
+	uint16 key,Entered_password;
+	GIE_Enabled();
+	GPIO_setupPinDirection(PORTD_ID, PIN7_ID, PIN_OUTPUT);//buzzer
+	GPIO_writePin(PORTD_ID, PIN7_ID, LOGIC_HIGH);
+
+	TWI_init(1);
+	EEPROM_writeByte(0,5);
+	TIMER0_init(&config0);
+	delay0(80);
+	test=EEPROM_readByte(0,&sys_password);
+	LCD_init();
+	Ultrasonic_init();
+	UART_init(38400);
+	/* Initialize the SPI driver as Master */
+	SPI_initMaster(F_CPU16);
+	while(1)
+	{
+		while(key_switch==0)
+		{
+			for (buzzer = 0; buzzer < 3; buzzer++)
+			{
+				start();
+				for (i = 0; i < 4; i++)
+				{
+
+					key=KEYPAD_getPressedKey();
+					Entered_password+=key;
+					LCD_displayStringRowColumn(1, i, "*");
+					if (i==3)
+					{
+						break;
+					}
+					Entered_password*=10;
+				}
+
+				key_switch=check_password(Entered_password);
+				if (key_switch==1)
+				{
+					LCD_clearScreen();
+					key_switch=100;
+					break;
+				}
+				if (buzzer==2)
+				{
+					GPIO_writePin(PORTD_ID, PIN7_ID, LOGIC_LOW);
+					TIMER0_init(&config0);
+					delay0(16000);
+					GPIO_writePin(PORTD_ID, PIN7_ID, LOGIC_HIGH);
+				}
+
+			}
+
+		}
+		if (key_switch==100)
+		{
+			welcome();
+			key_switch=1;
+			LCD_clearScreen();
+			UART_sendByte(1);
+
+		}
+		if (key_switch==1)
+		{
+			print_ultrasonic();
+			UART_sendByte(flag_to_send);
+			direction=UART_recieveByte();
+			speed=UART_recieveByte();
+
+			if (speed==0)
+			{
+				SPI_sendReceiveByte(0);
+				stop_moving();
+			}
+			else
+			{
+				SPI_sendReceiveByte(1);
+				choose_direction();
+				start_moving(speed);
+			}
+		}
+
+	}
+
+
+
+	return 0;
+}

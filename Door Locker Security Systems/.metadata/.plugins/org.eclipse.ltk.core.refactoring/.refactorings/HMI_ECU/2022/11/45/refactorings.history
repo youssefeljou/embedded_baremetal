@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;HMI_ECU/check_first_password.c&apos; to &apos;check_password.c&apos;" description="Rename resource &apos;check_first_password.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="check_first_password.c" name="check_password.c" stamp="1667567439726" updateReferences="true"/>
+</session>

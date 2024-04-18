@@ -1,0 +1,8 @@
+11:51:28 **** Rebuild of configuration Debug for project test.c ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\test.c.o" "..\\src\\test.c.c" 
+gcc -o test.c.exe "src\\test.c.o" 
+11:51:40 **** Incremental Build of configuration Debug for project test.c ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\test.c.o" "..\\src\\test.c.c" 
+gcc -o test.c.exe "src\\test.c.o" 

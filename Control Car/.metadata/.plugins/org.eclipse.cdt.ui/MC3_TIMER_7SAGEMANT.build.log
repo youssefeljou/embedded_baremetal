@@ -1,0 +1,39 @@
+15:12:49 **** Incremental Build of configuration Debug for project MC3_TIMER_7SAGEMANT ****
+make all 
+Building file: ../APP/mc3.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"APP/mc3.d" -MT"APP/mc3.o" -c -o "APP/mc3.o" "../APP/mc3.c"
+In file included from ../APP/mc3.c:12:
+c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+In file included from c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:37,
+                 from ../APP/mc3.c:12:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../APP/mc3.c
+ 
+Building target: MC3_TIMER_7SAGEMANT.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,MC3_TIMER_7SAGEMANT.map -mmcu=atmega32 -o "MC3_TIMER_7SAGEMANT.elf"  ./MCAL/GIE.o ./MCAL/gpio.o ./MCAL/interrupt.o ./MCAL/spi.o ./MCAL/timers.o ./MCAL/twi.o ./MCAL/uart.o  ./HAL/SevenSegment.o ./HAL/external_eeprom.o ./HAL/keypad.o ./HAL/lcd.o ./HAL/motor.o ./HAL/motor2.o ./HAL/ultra_sonic.o  ./APP/mc3.o   
+Finished building target: MC3_TIMER_7SAGEMANT.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S MC3_TIMER_7SAGEMANT.elf  >"MC3_TIMER_7SAGEMANT.lss"
+Finished building: MC3_TIMER_7SAGEMANT.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 MC3_TIMER_7SAGEMANT.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   23768 bytes (72.5% Full)
+(.text + .data + .bootloader)
+
+Data:        316 bytes (15.4% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+15:12:51 Build Finished. 0 errors, 2 warnings. (took 1s.501ms)
+

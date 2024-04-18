@@ -1,0 +1,36 @@
+02:13:59 **** Incremental Build of configuration Debug for project mc1_display ****
+make all 
+Building file: ../MCAL/timers.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/timers.d" -MT"MCAL/timers.o" -c -o "MCAL/timers.o" "../MCAL/timers.c"
+../MCAL/timers.c: In function 'Icu_setCallBack':
+../MCAL/timers.c:338: warning: function return types not compatible due to 'volatile'
+Finished building: ../MCAL/timers.c
+ 
+Building target: mc1_display.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,mc1_display.map -mmcu=atmega32 -o "mc1_display.elf"  ./MCAL/GIE.o ./MCAL/gpio.o ./MCAL/interrupt.o ./MCAL/spi.o ./MCAL/timers.o ./MCAL/twi.o ./MCAL/uart.o  ./HAL/SevenSegment.o ./HAL/external_eeprom.o ./HAL/keypad.o ./HAL/lcd.o ./HAL/motor.o ./HAL/ultra_sonic.o  ./APP/control_car.o   
+Finished building target: mc1_display.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S mc1_display.elf  >"mc1_display.lss"
+Finished building: mc1_display.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 mc1_display.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   21102 bytes (64.4% Full)
+(.text + .data + .bootloader)
+
+Data:        367 bytes (17.9% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+02:14:00 Build Finished. 0 errors, 1 warnings. (took 929ms)
+

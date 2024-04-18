@@ -1,0 +1,40 @@
+05:56:30 **** Incremental Build of configuration Debug for project HMI_ECU ****
+make all 
+Building file: ../check_password.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"check_password.d" -MT"check_password.o" -c -o "check_password.o" "../check_password.c"
+In file included from ../check_password.c:9:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../check_password.c: In function 'getPassword':
+../check_password.c:38: warning: implicit declaration of function 'UART_recieveByte'
+../check_password.c: In function 'mainOptions':
+../check_password.c:61: warning: implicit declaration of function 'UART_sendByte'
+Finished building: ../check_password.c
+ 
+Building target: HMI_ECU.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,HMI_ECU.map -mmcu=atmega32 -o "HMI_ECU.elf"  ./check_password.o ./gpio.o ./keypad.o ./lcd.o ./main.o ./timer.o ./uart.o   
+Finished building target: HMI_ECU.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S HMI_ECU.elf  >"HMI_ECU.lss"
+Finished building: HMI_ECU.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 HMI_ECU.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   10514 bytes (32.1% Full)
+(.text + .data + .bootloader)
+
+Data:        176 bytes (8.6% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+05:56:31 Build Finished. 0 errors, 3 warnings. (took 937ms)
+

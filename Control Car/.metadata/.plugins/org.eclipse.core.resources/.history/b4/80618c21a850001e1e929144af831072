@@ -1,0 +1,481 @@
+/*
+ * timer0_ctc.c
+ *
+ *  Created on: Aug 27, 2023
+ *      Author: Youmna
+ */
+
+
+#include "timers.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include "../LIB/common_macros.h"
+#include "../LIB/std_types.h"
+#include "gpio.h"
+
+uint32 g_tick,g_tick1,g2_tick;
+void (*Timer0_CALLBACK_Fptr)(void)=NULL_PTR;
+void (*Timer1_CALLBACK_Fptr) (void)=NULL_PTR;
+void (*Timer2_CALLBACK_Fptr)(void)=NULL_PTR;
+static volatile void (*g_callBackPtr)(void) = NULL_PTR;
+
+//********function of icu code **************//
+/*
+uint8 g_edgeCount = 0;
+uint16 g_timeHigh = 0;
+uint16 g_timePeriod = 0;
+uint16 g_timePeriodPlusHigh = 0;
+
+ */
+ISR(TIMER2_OVF_vect)
+{
+	if(Timer2_CALLBACK_Fptr != NULL_PTR)
+	{
+		(*Timer2_CALLBACK_Fptr)();
+	}
+}
+
+/*ISR(TIMER2_COMP_vect)
+{
+	if(Timer2_CALLBACK_Fptr != NULL_PTR)
+	{
+		(*Timer2_CALLBACK_Fptr)();
+	}
+
+}
+*/
+ISR(TIMER1_CAPT_vect)
+{
+	if(g_callBackPtr != NULL_PTR)
+	{
+		/* Call the Call Back function in the application after the edge is detected */
+		(*g_callBackPtr)(); /* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+
+ISR(TIMER1_OVF_vect)
+{
+	if(Timer1_CALLBACK_Fptr != NULL_PTR)
+	{
+		(*Timer1_CALLBACK_Fptr)();
+	}
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+	if(Timer1_CALLBACK_Fptr != NULL_PTR)
+	{
+		(*Timer1_CALLBACK_Fptr)();
+	}
+}
+ISR(TIMER0_OVF_vect)
+{
+	if(Timer0_CALLBACK_Fptr != NULL_PTR)
+	{
+		(*Timer0_CALLBACK_Fptr)();
+	}
+}
+
+ISR(TIMER0_COMP_vect)
+{
+	if(Timer0_CALLBACK_Fptr != NULL_PTR)
+	{
+		(*Timer0_CALLBACK_Fptr)();
+	}
+}
+
+
+void TIMER0_init(const Timer0_ConfigType * Config_Ptr)
+{
+
+	TCCR0 |= Config_Ptr->prescaler;
+	TCNT0 = Config_Ptr->initial_value;
+	SET_BIT(TIMSK,TOIE0);
+	if ((Config_Ptr->mode) == TIMER0_NORMAL_MODE)
+	{
+		SET_BIT(TCCR0,FOC0);//disable non-pwm
+		CLEAR_BIT(TCCR0,TCCR0_WGM00);
+		CLEAR_BIT(TCCR0,TCCR0_WGM01);//choose normal mode
+		CLEAR_BIT(TCCR0,TCCR0_COM00);
+		CLEAR_BIT(TCCR0,TCCR0_COM01);//normal operation OC0 disconnected
+		//enable interrupt
+
+	}
+	else if ((Config_Ptr->mode) == TIMER0_PWM_PHASE_COTROL)
+	{
+		SET_BIT(TCCR0,TCCR0_WGM00);
+		CLEAR_BIT(TCCR0,TCCR0_WGM01);//choose PHASE_CONTROL
+		CLEAR_BIT(TCCR0,TCCR0_COM00);
+		CLEAR_BIT(TCCR0,TCCR0_COM01);//normal operation OC0 disconnected
+
+	}
+
+	else if ((Config_Ptr->mode) == TIMER0_COMPARE_MODE)
+
+	{
+		SET_BIT(TCCR0,FOC0);//disable non-pwm
+
+		CLEAR_BIT(TCCR0,TCCR0_WGM00);
+		SET_BIT(TCCR0,TCCR0_WGM01);//enable COMPARE mode
+		//disconnect oc0 and meke compare normal mode
+		CLEAR_BIT(TCCR0,TCCR0_COM00);
+		CLEAR_BIT(TCCR0,TCCR0_COM01);
+		//enable interrupt
+		SET_BIT(TIMSK,OCIE0);
+		OCR0=Config_Ptr->compare_value;//compare value
+	}
+	else if((Config_Ptr->mode) == TIMER0_FAST_PWM_MODE)
+	{
+		SET_BIT(TCCR0,TCCR0_WGM00);
+		SET_BIT(TCCR0,TCCR0_WGM01);//enable FAST PWM MODE
+
+		//disconnect oc0 and meke FAST PWM NORMAL MODE
+		CLEAR_BIT(TCCR0,TCCR0_COM00);
+		CLEAR_BIT(TCCR0,TCCR0_COM01);
+	}
+
+}
+
+void TIMER0_deInit(void)
+{
+	TCCR0 = 0;
+	TCNT0 = 0;
+	CLEAR_BIT(TIMSK,TOIE0);
+	CLEAR_BIT(TIFR,TOV0);
+	OCR0 = 0;
+	CLEAR_BIT(TIMSK,OCIE0);
+	CLEAR_BIT(TIFR,OCF0);
+	Timer0_CALLBACK_Fptr = NULL_PTR;
+}
+
+
+
+
+void delay0(uint32 seconds)
+{
+	g_tick = 0;
+	uint32 tick = seconds;
+	Timer0_setCallBack(&TIMER0_tick);
+	while(g_tick  < tick);
+	TIMER0_deInit();
+}
+
+void timer0_tick(void)
+{
+	g_tick++;
+}
+
+void Timer0_setCallBack(void(*Copy_pvCallBackFunc)(void))
+{
+	Timer0_CALLBACK_Fptr=Copy_pvCallBackFunc;
+}
+
+void PWM_Timer0_Start(uint8 duty_cycle)
+{
+
+	uint8 timer_value=((uint16)(duty_cycle*255)/100);
+	CLEAR_BIT(TCCR0,TCNT0);
+	CLEAR_BIT(TCCR0,TCCR0_FOC0);
+
+	GPIO_setupPinDirection(PORTB_ID,PIN3_ID,PIN_OUTPUT);
+	OCR0=timer_value;
+}
+
+
+void Timer1_init(const Timer1_ConfigType * Config_Ptr)
+{
+	TCCR1B = Config_Ptr->prescaler;
+	TCNT1 = Config_Ptr->initial_value;
+	SET_BIT(TCCR1A,COM1A0);
+	SET_BIT(TCCR1A,COM1B0);
+
+	if ((Config_Ptr->mode)==TIMER1_NORMAL_MODE)
+	{
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM10);
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM11);
+		CLEAR_BIT(TCCR1B,TCCR1B_WGM12);
+		CLEAR_BIT(TCCR1B,TCCR1B_WGM13);
+		SET_BIT(TIMSK,TOIE1);
+	}
+	else if ((Config_Ptr->mode)==TIMER1_COMPARE_OCR1A)
+	{
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM10);
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM11);
+		SET_BIT(TCCR1B,TCCR1B_WGM12);
+		CLEAR_BIT(TCCR1B,TCCR1B_WGM13);
+
+	}
+
+	else if  ((Config_Ptr->mode)==TIMER1_PWM_Phase_Correct_ICR1)
+	{
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM10);
+		SET_BIT(TCCR1A,TCCR1A_WGM11);
+		CLEAR_BIT(TCCR1B,TCCR1B_WGM12);
+		SET_BIT(TCCR1B,TCCR1B_WGM13);
+	}
+	else if  ((Config_Ptr->mode)==TIMER1_PWM_Phase_Correct_OCR1A)
+	{
+		SET_BIT(TCCR1A,TCCR1A_WGM10);
+		SET_BIT(TCCR1A,TCCR1A_WGM11);
+		CLEAR_BIT(TCCR1B,TCCR1B_WGM12);
+		SET_BIT(TCCR1B,TCCR1B_WGM13);
+	}
+	else if  ((Config_Ptr->mode)==TIMER1_COMPARE_ICR1)
+	{
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM10);
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM11);
+		SET_BIT(TCCR1B,TCCR1B_WGM12);
+		SET_BIT(TCCR1B,TCCR1B_WGM13);
+	}
+	else if  ((Config_Ptr->mode)==TIMER1_FAST_PWM_ICR1)
+	{
+		CLEAR_BIT(TCCR1A,TCCR1A_WGM10);
+		SET_BIT(TCCR1A,TCCR1A_WGM11);
+		SET_BIT(TCCR1B,TCCR1B_WGM12);
+		SET_BIT(TCCR1B,TCCR1B_WGM13);
+	}
+	else if  ((Config_Ptr->mode)==TIMER1_FAST_PWM_OCR1A)
+	{
+		SET_BIT(TCCR1A,TCCR1A_WGM10);
+		SET_BIT(TCCR1A,TCCR1A_WGM11);
+		SET_BIT(TCCR1B,TCCR1B_WGM12);
+		SET_BIT(TCCR1B,TCCR1B_WGM13);
+	}
+
+
+
+#ifdef OCIE1A
+	SET_BIT(TIMSK,OCIE1A);
+	OCR1A=Config_Ptr->compare_value_A;
+
+#endif
+#ifdef OCIE1B
+	SET_BIT(TIMSK,OCIE1B);
+	OCR1B=Config_Ptr->compare_value_B;
+#endif
+#ifdef TICIE1
+	SET_BIT(TIMSK,TICIE1);
+#endif
+}
+
+
+
+void Timer1_deInit(void)
+{
+	TCCR1A = 0;
+	TCCR1B = 0;
+	TCNT1 =  0;
+	CLEAR_BIT(TIMSK,TOIE1);
+	CLEAR_BIT(TIFR,TOV1);
+	OCR1A = 0;
+	CLEAR_BIT(TIMSK,OCIE1A);
+	CLEAR_BIT(TIFR,OCF1A);
+	Timer1_CALLBACK_Fptr = NULL_PTR;
+}
+/* timer to count second*/
+
+void delay1(uint32 seconds){
+
+	g_tick1 = 0;
+	uint32 tick = seconds;
+	Timer1_setCallBack(&timer_tick);
+	while(g_tick1  < tick);
+	Timer1_deInit();
+}
+void timer_tick(void){
+	g_tick1++;
+}
+void Timer1_setCallBack(void(*a_ptr)(void))
+{
+	Timer1_CALLBACK_Fptr = a_ptr;
+}
+
+void TIMER1_ICU_Enable(const Icu_ConfigType * Config_Ptr)
+{
+	/* Configure ICP1/PD6 as i/p pin */
+	GPIO_setupPinDirection(PORTD_ID, PIN6_ID, PIN_INPUT);
+	/* Timer1 always operates in Normal Mode */
+	TCCR1A = (1<<FOC1A) | (1<<FOC1B);
+	/*
+	 * insert the required clock value in the first three bits (CS10, CS11 and CS12)
+	 * of TCCR1B Register
+	 */
+	TCCR1B = (TCCR1B & 0xF8) | (Config_Ptr->clock);
+	/*
+	 * insert the required edge type in ICES1 bit in TCCR1B Register
+	 */
+	TCCR1B = (TCCR1B & 0xBF) | ((Config_Ptr->edge)<<6);
+	/* Initial Value for the input capture register */
+	ICR1 = 0;
+	/* Initial Value for Timer1 */
+	TCNT1 = 0;
+
+	TIMSK |= (1<<TICIE1);/* Enable the Input Capture interrupt to generate an interrupt when edge is detected on ICP1/PD6 pin */
+
+}
+
+void TIMER1_ICU_Disable(void)
+{
+
+	/* Disable the Input Capture interrupt */
+	TIMSK &= ~(1<<TICIE1);
+}
+
+uint16 TIMER1_ICU_GetTCNT1(void)
+{
+	return ICR1;
+}
+
+void TIMER1_ICU_SetTCNT1(uint16 new_tcnt1)
+{
+	TCNT1L = new_tcnt1;
+}
+
+
+void Icu_setCallBack(void(*a_ptr)(void))
+{
+	/* Save the address of the Call back function in a global variable */
+	g_callBackPtr = a_ptr;
+}
+
+void Icu_setEdgeDetectionType(uint8 a_edgeType)
+{
+	/*
+	 * insert the required edge type in ICES1 bit in TCCR1B Register
+	 */
+	TCCR1B = (TCCR1B & 0xBF) | (a_edgeType<<6);
+}
+void Icu_clearTimerValue(void)
+{
+	TCNT1 = 0;
+}
+/*
+void APP_edgeProcessing(void)
+{
+	g_edgeCount++;
+	if(g_edgeCount == 1)
+	{
+
+		  //Clear the timer counter register to start measurements from the
+		  //first detected rising edge
+
+		Icu_clearTimerValue();
+		// Detect falling edge
+		Icu_setEdgeDetectionType(FALLING);
+	}
+	else if(g_edgeCount == 2)
+	{
+		// Store the High time value
+		g_timeHigh = Icu_getInputCaptureValue();
+		// Detect rising edge
+		Icu_setEdgeDetectionType(RISING);
+	}
+	else if(g_edgeCount == 3)
+	{
+		// Store the Period time value
+		g_timePeriod = Icu_getInputCaptureValue();
+		// Detect falling edge
+		Icu_setEdgeDetectionType(FALLING);
+	}
+	else if(g_edgeCount == 4)
+	{
+		// Store the Period time value + High time value
+		g_timePeriodPlusHigh = Icu_getInputCaptureValue();
+		// Clear the timer counter register to start measurements again
+		Icu_clearTimerValue();
+		// Detect rising edge
+		Icu_setEdgeDetectionType(RISING);
+		//to continye make g_edgeCount=0
+	}
+}
+ */
+
+void TIMER2_init(const Timer2_ConfigType * Config_Ptr)
+{
+
+	TCCR2 = Config_Ptr->prescaler;
+	TCNT2 = Config_Ptr->initial_value;
+	SET_BIT(TIMSK,TOIE2);
+	if ((Config_Ptr->mode) == TIMER2_NORMAL_MODE)
+	{
+		SET_BIT(TCCR2,TCCR2_FOC02);//disable non-pwm
+		CLEAR_BIT(TCCR2,TCCR2_WGM20);
+		CLEAR_BIT(TCCR2,TCCR2_WGM21);//choose normal mode
+		CLEAR_BIT(TCCR2,TCCR2_COM20);
+		CLEAR_BIT(TCCR2,TCCR2_COM21);//normal operation OC2 disconnected
+		//enable interrupt
+		SET_BIT(TIMSK,TIMSK_TOIE2);
+	}
+	else if ((Config_Ptr->mode) == TIMER2_PWM_PHASE_COTROL)
+	{
+
+		SET_BIT(TCCR2,TCCR2_WGM20);
+		CLEAR_BIT(TCCR2,TCCR2_WGM21);//choose normal mode
+		CLEAR_BIT(TCCR2,TCCR2_COM20);
+		CLEAR_BIT(TCCR2,TCCR2_COM21);//normal operation OC2 disconnected
+
+	}
+
+	else if ((Config_Ptr->mode) == TIMER2_COMPARE_MODE)
+
+	{
+		SET_BIT(TCCR2,TCCR2_FOC02);//enable non-pwm
+		OCR2=Config_Ptr->compare_value;//compare value
+		CLEAR_BIT(TCCR2,TCCR2_WGM20);
+		SET_BIT(TCCR2,TCCR2_WGM21);//choose normal mode
+		CLEAR_BIT(TCCR2,TCCR2_COM20);
+		CLEAR_BIT(TCCR2,TCCR2_COM21);//normal operation OC2 disconnected
+		//enable interrupt
+		SET_BIT(TIMSK,TIMSK_OCIE2);
+	}
+	else if((Config_Ptr->mode) == TIMER2_FAST_PWM_MODE)
+	{
+		SET_BIT(TCCR2,TCCR2_WGM20);
+		SET_BIT(TCCR2,TCCR2_WGM21);//choose normal mode
+		CLEAR_BIT(TCCR2,TCCR2_COM20);
+		CLEAR_BIT(TCCR2,TCCR2_COM21);//normal operation OC2 disconnected
+	}
+
+}
+
+void Timer2_deInit(void)
+{
+	TCCR2 = 0;
+	TCNT2 = 0;
+	CLEAR_BIT(TIMSK,TIMSK_TOIE2);
+	CLEAR_BIT(TIFR,TOV2);
+	OCR2 = 0;
+	CLEAR_BIT(TIMSK,TIMSK_OCIE2);
+	CLEAR_BIT(TIFR,OCF2);
+	Timer2_CALLBACK_Fptr = NULL_PTR;
+}
+
+void delay2(uint32 seconds)
+{
+	g_tick = 0;
+	uint32 tick = seconds;
+	Timer2_setCallBack(&timer2_tick);
+	while(g_tick  < tick);
+	Timer2_deInit();
+}
+
+void timer2_tick(void)
+{
+	g_tick++;
+}
+
+void Timer2_setCallBack(void(*Copy_pvCallBackFunc)(void))
+{
+	Timer2_CALLBACK_Fptr=Copy_pvCallBackFunc;
+}
+
+
+void PWM_Timer2_Start(uint8 duty_cycle)
+{
+
+	uint8 timer_value=((uint16)(duty_cycle*255)/100);
+	CLEAR_BIT(TCCR2,TCNT2);
+	CLEAR_BIT(TCCR2,TCCR2_FOC02);
+	GPIO_setupPinDirection(PORTD_ID,PIN7_ID,PIN_OUTPUT);
+	OCR2=timer_value;
+}

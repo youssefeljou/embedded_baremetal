@@ -1,0 +1,10 @@
+#ifndef MCAL_INTERRUPT_H_
+#define MCAL_INTERRUPT_H_
+#include "std_types.h"
+#include <avr/interrupt.h>
+
+void INT0_Init(void);
+void INT1_Init(void);
+void INT2_Init(void);
+
+#endif /* MCAL_INTERRUPT_H_ */

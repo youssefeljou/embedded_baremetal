@@ -1,0 +1,32 @@
+/*
+ * motor.c
+ *
+ *  Created on: Oct 8, 2022
+ *      Author: Youmna
+ */
+#include "motor.h"
+#include "common_macros.h" /* To use the macros like SET_BIT */
+#include <avr/io.h> /* To use ICU/Timer1 Registers */
+#include <avr/interrupt.h> /* For ICU ISR */
+#include "gpio.h"
+void direction()
+{
+	GPIO_setupPinDirection(Motor_IN1_PORT_ID ,Motor_IN1_PIN_ID,PIN_OUTPUT );
+	GPIO_setupPinDirection(Motor_IN2_PORT_ID ,Motor_IN2_PIN_ID,PIN_OUTPUT );
+
+	DcMotor_State->CW;
+}
+void speed(unsigned char speed)
+{
+	/* generate duty cycle 50% to get half motor speed */
+	PWM_Timer0_Init(speed*256/100);
+
+}
+void changeSpeed(unsigned char temper)
+{
+	speed(temper*100/120);
+
+}
+
+
+

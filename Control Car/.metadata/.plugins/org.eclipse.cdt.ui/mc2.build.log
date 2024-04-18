@@ -1,0 +1,46 @@
+02:23:13 **** Incremental Build of configuration Debug for project mc2 ****
+make all 
+Building file: ../APP/mc2.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"APP/mc2.d" -MT"APP/mc2.o" -c -o "APP/mc2.o" "../APP/mc2.c"
+In file included from ../APP/mc2.c:16:
+c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+In file included from c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:37,
+                 from ../APP/mc2.c:16:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../APP/mc2.c: In function '__vector_5':
+../APP/mc2.c:34: warning: implicit declaration of function 'display_seven_sagement'
+../APP/mc2.c: At top level:
+../APP/mc2.c:73: warning: conflicting types for 'display_seven_sagement'
+../APP/mc2.c:34: warning: previous implicit declaration of 'display_seven_sagement' was here
+../APP/mc2.c: In function 'main':
+../APP/mc2.c:140: warning: unused variable 'config1'
+Finished building: ../APP/mc2.c
+ 
+Building target: mc2.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,mc2.map -mmcu=atmega32 -o "mc2.elf"  ./MCAL/GIE.o ./MCAL/gpio.o ./MCAL/interrupt.o ./MCAL/spi.o ./MCAL/timers.o ./MCAL/twi.o ./MCAL/uart.o  ./HAL/SevenSegment.o ./HAL/external_eeprom.o ./HAL/keypad.o ./HAL/lcd.o ./HAL/motor.o ./HAL/motor2.o ./HAL/ultra_sonic.o  ./APP/mc2.o   
+Finished building target: mc2.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S mc2.elf  >"mc2.lss"
+Finished building: mc2.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 mc2.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   22596 bytes (69.0% Full)
+(.text + .data + .bootloader)
+
+Data:        314 bytes (15.3% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+02:23:14 Build Finished. 0 errors, 6 warnings. (took 966ms)
+

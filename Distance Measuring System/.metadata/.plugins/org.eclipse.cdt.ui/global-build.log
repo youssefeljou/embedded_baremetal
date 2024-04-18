@@ -1,0 +1,31 @@
+23:21:21 **** Incremental Build of configuration Debug for project project_4 ****
+make all 
+Building file: ../GIE.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"GIE.d" -MT"GIE.o" -c -o "GIE.o" "../GIE.c"
+Finished building: ../GIE.c
+ 
+Building target: project_4.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,project_4.map -mmcu=atmega32 -o "project_4.elf"  ./.metadata/.plugins/org.eclipse.cdt.make.core/specs.o  ./GIE.o ./gpio.o ./lcd.o ./main.o ./timers.o ./ultra_sonic.o   
+Finished building target: project_4.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S project_4.elf  >"project_4.lss"
+Finished building: project_4.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 project_4.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   13550 bytes (41.4% Full)
+(.text + .data + .bootloader)
+
+Data:        309 bytes (15.1% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

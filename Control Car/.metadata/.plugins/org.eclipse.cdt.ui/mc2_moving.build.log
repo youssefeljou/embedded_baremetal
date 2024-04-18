@@ -1,0 +1,134 @@
+01:22:27 **** Build of configuration Debug for project mc2_moving ****
+make all 
+Building file: ../MCAL/GIE.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/GIE.d" -MT"MCAL/GIE.o" -c -o "MCAL/GIE.o" "../MCAL/GIE.c"
+Finished building: ../MCAL/GIE.c
+ 
+Building file: ../MCAL/gpio.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/gpio.d" -MT"MCAL/gpio.o" -c -o "MCAL/gpio.o" "../MCAL/gpio.c"
+Finished building: ../MCAL/gpio.c
+ 
+Building file: ../MCAL/interrupt.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/interrupt.d" -MT"MCAL/interrupt.o" -c -o "MCAL/interrupt.o" "../MCAL/interrupt.c"
+Finished building: ../MCAL/interrupt.c
+ 
+Building file: ../MCAL/spi.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/spi.d" -MT"MCAL/spi.o" -c -o "MCAL/spi.o" "../MCAL/spi.c"
+Finished building: ../MCAL/spi.c
+ 
+Building file: ../MCAL/timers.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/timers.d" -MT"MCAL/timers.o" -c -o "MCAL/timers.o" "../MCAL/timers.c"
+../MCAL/timers.c: In function 'Icu_setCallBack':
+../MCAL/timers.c:343: warning: function return types not compatible due to 'volatile'
+Finished building: ../MCAL/timers.c
+ 
+Building file: ../MCAL/twi.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/twi.d" -MT"MCAL/twi.o" -c -o "MCAL/twi.o" "../MCAL/twi.c"
+Finished building: ../MCAL/twi.c
+ 
+Building file: ../MCAL/uart.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"MCAL/uart.d" -MT"MCAL/uart.o" -c -o "MCAL/uart.o" "../MCAL/uart.c"
+Finished building: ../MCAL/uart.c
+ 
+Building file: ../HAL/SevenSegment.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/SevenSegment.d" -MT"HAL/SevenSegment.o" -c -o "HAL/SevenSegment.o" "../HAL/SevenSegment.c"
+In file included from ../HAL/SevenSegment.c:6:
+../HAL/SevenSegment.h:1:21: warning: extra tokens at end of #ifndef directive
+../HAL/SevenSegment.h:2:21: warning: ISO C99 requires whitespace after the macro name
+In file included from ../HAL/SevenSegment.c:9:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../HAL/SevenSegment.c
+ 
+Building file: ../HAL/external_eeprom.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/external_eeprom.d" -MT"HAL/external_eeprom.o" -c -o "HAL/external_eeprom.o" "../HAL/external_eeprom.c"
+Finished building: ../HAL/external_eeprom.c
+ 
+Building file: ../HAL/keypad.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/keypad.d" -MT"HAL/keypad.o" -c -o "HAL/keypad.o" "../HAL/keypad.c"
+In file included from ../HAL/keypad.c:14:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../HAL/keypad.c
+ 
+Building file: ../HAL/lcd.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/lcd.d" -MT"HAL/lcd.o" -c -o "HAL/lcd.o" "../HAL/lcd.c"
+In file included from ../HAL/lcd.c:15:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../HAL/lcd.c: In function 'LCD_intgerToString':
+../HAL/lcd.c:213: warning: implicit declaration of function 'itoa'
+Finished building: ../HAL/lcd.c
+ 
+Building file: ../HAL/motor.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/motor.d" -MT"HAL/motor.o" -c -o "HAL/motor.o" "../HAL/motor.c"
+../HAL/motor.c: In function 'changeSpeed':
+../HAL/motor.c:27: warning: implicit declaration of function 'PWM_TIMER0_Start'
+Finished building: ../HAL/motor.c
+ 
+Building file: ../HAL/motor2.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/motor2.d" -MT"HAL/motor2.o" -c -o "HAL/motor2.o" "../HAL/motor2.c"
+../HAL/motor2.c: In function 'changeSpeed2':
+../HAL/motor2.c:27: warning: implicit declaration of function 'PWM_TIMER2_Start'
+Finished building: ../HAL/motor2.c
+ 
+Building file: ../HAL/ultra_sonic.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"HAL/ultra_sonic.d" -MT"HAL/ultra_sonic.o" -c -o "HAL/ultra_sonic.o" "../HAL/ultra_sonic.c"
+In file included from ../HAL/ultra_sonic.c:9:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../HAL/ultra_sonic.c: In function 'Ultrasonic_edgeProcessing':
+../HAL/ultra_sonic.c:25: warning: implicit declaration of function 'Icu_clearTimerValue'
+../HAL/ultra_sonic.c:26: warning: implicit declaration of function 'Icu_setEdgeDetectionType'
+../HAL/ultra_sonic.c: In function 'Ultrasonic_init':
+../HAL/ultra_sonic.c:41: warning: implicit declaration of function 'Icu_setCallBack'
+../HAL/ultra_sonic.c:42: warning: passing argument 1 of 'TIMER1_ICU_Enable' from incompatible pointer type
+Finished building: ../HAL/ultra_sonic.c
+ 
+Building file: ../APP/mc2.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"APP/mc2.d" -MT"APP/mc2.o" -c -o "APP/mc2.o" "../APP/mc2.c"
+In file included from ../APP/mc2.c:16:
+c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+In file included from c:/winavr-20100110/lib/gcc/../../avr/include/avr/delay.h:37,
+                 from ../APP/mc2.c:16:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../APP/mc2.c
+ 
+Building target: mc2_moving.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,mc2_moving.map -mmcu=atmega32 -o "mc2_moving.elf"  ./MCAL/GIE.o ./MCAL/gpio.o ./MCAL/interrupt.o ./MCAL/spi.o ./MCAL/timers.o ./MCAL/twi.o ./MCAL/uart.o  ./HAL/SevenSegment.o ./HAL/external_eeprom.o ./HAL/keypad.o ./HAL/lcd.o ./HAL/motor.o ./HAL/motor2.o ./HAL/ultra_sonic.o  ./APP/mc2.o   
+Finished building target: mc2_moving.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S mc2_moving.elf  >"mc2_moving.lss"
+Finished building: mc2_moving.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 mc2_moving.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   20418 bytes (62.3% Full)
+(.text + .data + .bootloader)
+
+Data:        307 bytes (15.0% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+01:22:31 Build Finished. 0 errors, 16 warnings. (took 4s.358ms)
+

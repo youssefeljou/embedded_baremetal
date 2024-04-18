@@ -1,0 +1,16 @@
+/*
+ * motor.h
+ *
+ *  Created on: Oct 8, 2022
+ *      Author: Youmna
+ */
+
+#ifndef MOTOR_H_
+#define MOTOR_H_
+#include "std_types.h"
+
+void PWM_Timer0_Init(unsigned char set_duty_cycle);
+void speed(unsigned char speed);
+void changeSpeed(unsigned char temper);
+
+#endif /* MOTOR_H_ */

@@ -1,0 +1,63 @@
+/*
+ ================================================================================================
+ Name        : temp_sensor_example.c
+ Author      : Mohamed Tarek
+ Description : Test the ADC driver designed with polling technique using LM35 Temperature Sensor
+ Date        : 5/9/2015
+ ================================================================================================
+ */
+
+#include "adc.h"
+#include "lcd.h"
+#include "lm35_sensor.h"
+#include "motor.h"
+#include <avr/io.h>
+#include "pwm.h"
+
+int main(void)
+{
+	ADC_ConfigType ADC_Config = {INTVCC,F_CPU_8};
+	uint8 temp=0;
+	LCD_init(); /* initialize LCD driver */
+	ADC_init(&ADC_Config);
+	LCD_displayString("Fan is ");
+	LCD_moveCursor(1,0);
+	LCD_displayString("Temp = C");
+
+	while(1)
+	{
+
+
+		temp = LM35_getTemperature();
+
+		/* Display the temperature value every time at same position */
+		/*if (temp<30)
+		{
+
+			LCD_moveCursor(0,7);
+			LCD_displayString("off");
+			changeSpeed(temp);
+		}
+		else if (temp>30)
+		{
+
+			LCD_moveCursor(0,7);
+			LCD_displayString("on");
+			LCD_displayCharacter(' ');
+			changeSpeed(temp);
+
+		}
+		 */
+
+		LCD_moveCursor(1,7);
+
+
+			LCD_intgerToString(temp);
+
+
+
+
+
+	}
+}
+

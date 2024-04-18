@@ -1,0 +1,17 @@
+21:39:38 **** Incremental Build of configuration Debug for project projec ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 projec.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:    9394 bytes (28.7% Full)
+(.text + .data + .bootloader)
+
+Data:        288 bytes (14.1% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

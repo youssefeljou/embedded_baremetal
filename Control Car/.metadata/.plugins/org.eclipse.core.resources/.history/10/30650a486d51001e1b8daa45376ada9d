@@ -1,0 +1,118 @@
+/*
+ * mc2.c
+ *
+ *  Created on: Sep 10, 2023
+ *      Author: Youmna
+ */
+#include "../LIB/std_types.h"
+#include "../LIB/common_macros.h"
+#include "../MCAL/gpio.h"
+#include "../MCAL/GIE.h"
+#include "../MCAL/twi.h"
+#include "../MCAL/timers.h"
+#include "../MCAL/interrupt.h"
+#include "../MCAL/uart.h"
+#include "../HAL/motor.h"
+#include "avr/delay.h"
+
+#define F_CPU 8000000UL
+#define forward		0
+#define backword	1
+uint8 count_speed=0;
+
+uint8 flag;
+uint8 flag2;
+uint8 direction=0;
+
+
+
+ISR(INT0_vect)
+{
+	count_speed++;
+	if (count_speed>=10)
+	{
+		count_speed=10;
+	}
+}
+ISR(INT1_vect)
+{
+	if (count_speed==0)
+	{
+		count_speed=1;
+	}
+	count_speed--;
+
+}
+ISR(INT2_vect)
+{
+	if (count_speed==0)
+	{
+		if (direction==forward)
+		{
+			direction=backword;
+		}
+		else
+		{
+			direction=forward;
+		}
+	}
+
+
+}
+int main()
+{
+	Timer0_ConfigType config0={0,0,TIMER0_FAST_PWM_MODE,timer0_PRESCALAR_CLK8};
+	Timer1_ConfigType config1={0,976,TIMER1_COMPARE_OCR1A,timer1_PRESCALAR_CLK1024};
+	Timer2_ConfigType config2={0,0,TIMER2_NORMAL_MODE,timer2_PRESCALAR_CLK64};
+	DDRC = 0x0F;
+	PORTC &= 0xF0;
+	DDRA =0X3F;
+	PORTA &=0xC0;
+	uint8 flag2;
+	INT0_Init();
+	INT1_Init();
+	INT2_Init();
+	motor_init();
+	GIE_Enabled();
+	UART_init(38400);
+	TIMER0_init(&config0);
+
+	_delay_ms(60);
+	GIE_Enabled();
+	//TIMER1_init(&config1);
+	TIMER2_init(&config2);
+	flag=UART_recieveByte();
+	while(1)
+	{
+		display_seven_sagement();
+		flag2=UART_recieveByte();
+		UART_sendByte(direction);
+		if (flag2==0)
+		{
+			TCCR1A &= ~(1<<FOC1A);
+			TCCR1B &= ~(1<<CS10) & ~(1<<CS12);
+			count_speed=0;
+			UART_sendByte(count_speed);
+			changeSpeed(count_speed*10);
+		}
+		else
+		{
+			TCCR1A |= (1<<FOC1A);
+			TCCR1B |= (1<<CS10) | (1<<CS12);
+
+			if (direction==forward)
+			{
+				rotate_cw();
+			}
+			else if (direction==backword)
+			{
+				rotate_acw();
+			}
+			changeSpeed(count_speed*10);
+			UART_sendByte(count_speed);
+
+		}
+		display_seven_sagement();
+	}
+	return 0;
+}

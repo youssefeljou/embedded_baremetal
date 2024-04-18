@@ -1,0 +1,76 @@
+/*
+ * spi.h
+ *
+ *  Created on: Aug 31, 2023
+ *      Author: Youmna
+ */
+
+
+
+#ifndef SPI_H_
+#define SPI_H_
+
+#include "../LIB/std_types.h"
+#include "common_macros.h"
+
+#define SPSR_SPIF		7
+#define SPSR_SPI2X		0
+
+
+#define SPCR_SPE		6
+#define SPCR_MSTR		4
+#define SPCR_SPR1		1
+#define SPCR_SPR0		0
+
+
+#define SPI_DEFAULT_DATA_VALUE 0xFF
+
+
+
+/*******************************************************************************
+ *                      Functions Prototypes                                   *
+ *******************************************************************************/
+#define DOUBLE_SPEED
+/*
+ * Description :
+ * Initialize the SPI device as Master.
+ */
+
+typedef enum
+{
+	 F_CPU4 = 0x02 , F_CPU16 = 0x04 , F_CPU64 = 0x06 , F_CPU128 = 0x07
+}  SPI_PRESCALLER;
+
+
+
+
+void SPI_initMaster( SPI_PRESCALLER config);
+
+/*
+ * Description :
+ * Initialize the SPI device as Slave.
+ */
+void SPI_initSlave(void);
+
+/*
+ * Description :
+ * Send the required data through SPI to the other SPI device.
+ * In the same time data will be received from the other device.
+ */
+uint8 SPI_sendReceiveByte(uint8 data);
+
+/*
+ * Description :
+ * Send the required string through SPI to the other SPI device.
+ */
+void SPI_sendString(const uint8 *str);
+
+/*
+ * Description :
+ * Receive the required string until the '#' symbol through SPI from the other SPI device.
+ */
+void SPI_receiveString(uint8 *str);
+
+#endif
+
+
